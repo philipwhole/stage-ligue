@@ -1,83 +1,128 @@
 <template>
-  <v-row justify="center" align="center">
-    <v-col cols="12" sm="8" md="6">
-      <v-card class="logo py-4 d-flex justify-center">
-        <NuxtLogo />
-        <VuetifyLogo />
-      </v-card>
-      <v-card>
-        <v-card-title class="headline">
-          Welcome to the Vuetify + Nuxt.js template
-        </v-card-title>
-        <v-card-text>
-          <p>Vuetify is a progressive Material Design component framework for Vue.js. It was designed to empower developers to create amazing applications.</p>
-          <p>
-            For more information on Vuetify, check out the <a
-              href="https://vuetifyjs.com"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              documentation
-            </a>.
-          </p>
-          <p>
-            If you have questions, please join the official <a
-              href="https://chat.vuetifyjs.com/"
-              target="_blank"
-              rel="noopener noreferrer"
-              title="chat"
-            >
-              discord
-            </a>.
-          </p>
-          <p>
-            Find a bug? Report it on the github <a
-              href="https://github.com/vuetifyjs/vuetify/issues"
-              target="_blank"
-              rel="noopener noreferrer"
-              title="contribute"
-            >
-              issue board
-            </a>.
-          </p>
-          <p>Thank you for developing with Vuetify and I look forward to bringing more exciting features in the future.</p>
-          <div class="text-xs-right">
-            <em><small>&mdash; John Leider</small></em>
-          </div>
-          <hr class="my-3">
-          <a
-            href="https://nuxtjs.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Nuxt Documentation
-          </a>
-          <br>
-          <a
-            href="https://github.com/nuxt/nuxt.js"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Nuxt GitHub
-          </a>
-        </v-card-text>
-        <v-card-actions>
-          <v-spacer />
-          <v-btn
-            color="primary"
-            nuxt
-            to="/inspire"
-          >
-            Continue
+    <v-container
+        class="pa-0"
+        fluid
+        style="
+            background-repeat: no-repeat;
+            background-position: center top;
+            background-size: cover;
+            background-image: linear-gradient(180deg,rgba(9,9,21,0) 0%,#090915 100%), url(./img/bcground-home.jpg)!important;">
+        <span
+            style="
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-image: url(./img/bcg-pattern.svg);
+            background-size: 8px auto;
+            background-position: 0 0;
+            background-repeat: repeat;
+        "></span>
+        <v-row no-gutters>
+            <v-card
+                class="mx-auto"
+                max-width="80%"
+                outlined
+                style="
+                border: none;
+                background-color:transparent" >
+                <v-card-text>
+                    <v-row
+                        class="pa-8 mx-0"
+                    >
+                        <div
+                            class="ms-4 title" align="center"
+                            style="
+                                color: #FFFFFF;
+                                font-weight: 500;">
+                                {{ invitationText }}
+                        </div>
+                    </v-row>
+                </v-card-text>
+            </v-card>
+        </v-row>
+        <v-row no-gutters  class="px-16 py-8">
+            <v-img
+                id="banner"
+                :alt="altBanner"
+                src="./img/img-banner.jpg">
+            </v-img>
+        </v-row>
+        <v-row no-gutters justify="center" style="height: 5rem; background-color: black;">
+             
+
+
+        <v-btn 
+            v-bind="attrs"
+            v-on="on"
+
+            elevation="2" 
+            style="background-color: #FFBB01; color:rgb(224, 43, 32); font-size:20px; text-shadow: 0.08em 0.08em 0.08em rgba(0,0,0,0.4); letter-spacing:4px; font-weight:700; padding: 24px 20px;">
+              
+            <AddDialog @member-saved="handleMemberSaved"></AddDialog>
           </v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-col>
-  </v-row>
+          
+        </v-row>
+        <v-row no-gutters>
+            <v-img
+                id="separateur"
+                alt="separateur"
+                src="./img/bcground-home-2.jpg"
+                height="350px"
+                background-position="center"
+                background-repeat="no-repeat"
+                background-size="cover">
+            </v-img>
+        </v-row>
+    </v-container>
 </template>
 
 <script>
+ 
+import { mapGetters, mapActions } from 'vuex'; 
+import AddDialog from '~/components/AddDialog.vue';
+ 
 export default {
-  name: 'IndexPage'
+    name: 'Home',
+    components: {AddDialog}, 
+    data() {
+        return {
+            headerTitle: 'Internship League',
+            altBanner: 'Banner Join Us',
+            invitationText: 'Live this collaborative experience by joining the internship league! Join like minded individuals who are as excited as you are to begin practicing their craft. Acquire the experience needed to close the junior gap and get hired by showing your work.',
+            textBtnJoinUs: 'Join now',
+            currentMember: null // Initialize currentMember 
+        } 
+    },
+    computed: {
+        ...mapGetters('members', [
+            'members',
+            'currentMember'
+        ]), 
+        regularComputedProperty () { 
+            return true
+        },
+         
+    }, 
+    methods: {
+        ...mapActions('members', [ 'loadMembers','addMember' ]),  
+        handleMemberSaved(member) {   
+         this.addMember( member)  
+       }, 
+      },
+      beforeRouteEnter(to, from, next) {
+        next(vm => { 
+         vm.loadMembers() ;  
+        })
+    }  
 }
 </script>
+
+<style scoped>
+.no-underline {
+  text-decoration: none;
+  color: red;
+}
+
+</style>
